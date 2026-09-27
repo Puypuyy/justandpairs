@@ -1,0 +1,36 @@
+export type Product = {
+  id: string;
+  sku: string;
+  slug: string;
+  name: string;
+  category: string;
+  type: "configurable" | "bespoke";
+  description: string;
+  shortDescription: string;
+  image: string;
+  imagePosition?: string;
+  basePrice?: number;
+  featured?: boolean;
+  sizes: number[];
+  finishes: string[];
+  style: string;
+  occasionTags: string[];
+  badge?: string;
+};
+export type Configuration = {
+  productId: string;
+  size: number;
+  finish: string;
+  quantity: number;
+  title: string;
+  recipient: string;
+  organization: string;
+  event: string;
+  message: string;
+  design: "help" | "upload";
+  idea: string;
+  file?: { name: string; type: string; size: number; data: string };
+  deadline: string;
+  rush: boolean;
+  delivery: "Pickup" | "Courier Delivery";
+};
