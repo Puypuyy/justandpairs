@@ -1,4 +1,5 @@
 import type { Configuration, Product } from "./types.ts";
+import type { RfqApi } from "./rfq-types.ts";
 export type { Configuration, Product } from "./types.ts";
 
 export type Category = {
@@ -47,6 +48,7 @@ export type RequestOptions = { signal?: AbortSignal };
 
 // Implement this interface in an AWS adapter when the backend contract is ready.
 export interface CustomerApi {
+  rfq: RfqApi;
   getSiteData(options?: RequestOptions): Promise<SiteData>;
   listProducts(
     filters?: ProductFilters,

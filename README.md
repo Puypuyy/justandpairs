@@ -1,4 +1,4 @@
-# Just and Pairs — Customer MVP 1
+# Just and Pairs — Customer MVP 1.5
 
 Vite + React + TypeScript + Material UI + React Router. Built from the supplied Brand Direction, Customer Website Shell and Product Catalog System documents.
 
@@ -16,7 +16,8 @@ Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `
 - Responsive homepage, product and occasion discovery, shared navigation and footer.
 - Catalog search, filters, sorting and empty states.
 - Configurable glass award pages with sizes, finishes, quantity, personalization, local file preview, deadline, delivery choice and estimate.
-- Quote placeholder preserves selections in sessionStorage. No requests are transmitted.
+- Guided seven-step RFQ with product handoff, local drafts, artwork previews, review/edit and local demo confirmation. No requests are transmitted.
+- Original quote preview retained at `/quote-preview`.
 - Help, concept portfolio and clear placeholders for future account, tracking and policy pages.
 - No authentication, backend, payment, upload service or production workflows.
 
@@ -27,6 +28,8 @@ Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `
 - `src/utils/`: display formatting and local configuration validation/persistence. Pricing and filtering live behind the API.
 - `src/components/`: reusable shell, product cards, actions and estimate.
 - `src/pages/`: customer routes.
+
+See [Customer MVP 1.5 implementation report](docs/CUSTOMER_MVP_1_5.md) for routes, API contracts, persistence, tests, changed files and limitations. RFQ data is stored locally through the mock API; the rest of the platform and AWS integration have not begun.
 
 Your supplied images are in `public/images/products/`: 29 unique images represent 28 products (clear and blue geometric panels share one product). Names describe visible designs; dimensions, construction, supported finishes and prices remain unconfirmed and use the quote preview. Original demo products and their illustrative pricing are separate.
 

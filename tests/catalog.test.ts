@@ -1,3 +1,5 @@
+import { createMockApi } from "../src/api/mock/adapter.ts";
+import { demoProducts } from "./fixtures/products.ts";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
@@ -61,6 +63,7 @@ test("supplied designs do not fabricate dimensions, processes or pricing", async
 });
 
 test("family filters and option SKU naming preserve catalog hierarchy", async () => {
+  const api = createMockApi({ latencyMs: 0, products: demoProducts });
   const data = await api.getSiteData();
   const merchandise = await api.listProducts({ family: "merchandise" });
   assert.ok(merchandise.length);

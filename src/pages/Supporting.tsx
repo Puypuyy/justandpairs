@@ -54,14 +54,14 @@ export function RequestQuote() {
               : "Something meaningful starts here."}
           </h1>
           <p>
-            Quote requests are part of the next customer phase.{" "}
+            This is your original configuration preview.{" "}
             {saved
               ? "Your selected product configuration has been saved for the next step."
-              : "Explore the collection and configure a recognition piece while we prepare the next step."}
+              : "Explore the collection or continue to the guided request."}
           </p>
           <Alert severity="info">
-            No request has been sent. Quote submission and order processing are
-            not available yet.
+            No request has been sent. You can now prepare a guided local demo
+            request. Online submission to Just and Pairs is not connected.
           </Alert>
           {saved && (
             <div className="saved-details">
@@ -108,12 +108,24 @@ export function RequestQuote() {
               <h3>{chosen.name}</h3>
               {variant && <p>Selected option: {variant.name}</p>}
               <p>
-                This piece will be quoted to your requirements when requests
-                become available.
+                Continue to the guided request to record your requirements
+                locally.
               </p>
             </div>
           )}
           <div className="button-row">
+            <Button
+              component={Link}
+              variant="contained"
+              to={`/request-quote${chosen ? `?product=${chosen.slug}` : ""}`}
+              state={{
+                config,
+                variantId: variant?.id,
+                rfqEntryId: crypto.randomUUID(),
+              }}
+            >
+              Continue to guided request
+            </Button>
             {product && (
               <Action
                 to={`/products/${product.slug}${variant ? `?variant=${encodeURIComponent(variant.id)}` : ""}`}

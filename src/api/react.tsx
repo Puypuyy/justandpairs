@@ -24,7 +24,7 @@ export type ApiResult<T> = {
 };
 
 // Abort old requests and ignore late responses, even if a future adapter ignores its signal.
-function useRequest<T>(
+export function useRequest<T>(
   request: (signal: AbortSignal) => Promise<T>,
 ): ApiResult<T> {
   const [attempt, setAttempt] = useState(0);
@@ -76,6 +76,9 @@ function useRequest<T>(
 }
 
 const ClientContext = createContext<CustomerApi>(api);
+export function useApi() {
+  return useContext(ClientContext);
+}
 const SiteContext = createContext<SiteData | null>(null);
 
 export function ApiProvider({

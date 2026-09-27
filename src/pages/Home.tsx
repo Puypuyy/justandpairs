@@ -39,7 +39,9 @@ export default function Home() {
               and moments worth remembering.
             </p>
             <div className="button-row">
-              <Action to="/request-quote">Start a Custom Order</Action>
+              <Action to="/request-quote?mode=custom">
+                Start a Custom Order
+              </Action>
               <Action to="/awards-plaques" secondary>
                 Explore Awards
               </Action>
@@ -198,7 +200,9 @@ export default function Home() {
               finished piece made for your event.
             </p>
             <div className="button-row">
-              <Action to="/request-quote">Start a Custom Order</Action>
+              <Action to="/request-quote?mode=custom">
+                Start a Custom Order
+              </Action>
               <Link className="text-link" to="/our-work">
                 See Our Work <ArrowUpRight size={17} />
               </Link>
@@ -266,7 +270,9 @@ export default function Home() {
             From one meaningful piece to a whole event, we'll help bring every
             detail together.
           </p>
-          <Action to="/request-quote">Talk to Us About Your Project</Action>
+          <Action to="/request-quote?mode=bulk">
+            Talk to Us About Your Project
+          </Action>
         </div>
         <div className="bulk-points">
           {[

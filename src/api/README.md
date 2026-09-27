@@ -61,7 +61,13 @@ Every method accepts an optional `{ signal: AbortSignal }`. A missing product re
 
 Local configuration persistence and file previews stay in the browser; these are user state, not remote API data. UI labels and presentation copy remain in components. Currency formatting remains a display utility.
 
-## AWS later
+## Customer MVP 1.5 RFQ
+
+Use `api.rfq` (or `useApi().rfq` inside React) for `getPolicy`, `openDraft`, `saveDraft`, `discardDraft`, `submit` and `getRecord`. Public types are in `rfq-types.ts`. The mock implementation owns the versioned `jp_rfq_state_v1` localStorage envelope; UI code must not access it directly. `useRfqAutosave` serializes saves and reports failures. Pure handoff, progression and validation rules live in `src/domain/rfq.ts`.
+
+Local demo records are separate from imported catalog data. Files stay as local previews while drafting; submitted receipts retain file metadata only. Nothing is sent to Just and Pairs. See [the MVP 1.5 report](../../docs/CUSTOMER_MVP_1_5.md).
+
+## AWS later (not part of MVP 1.5)
 
 1. Implement `CustomerApi` in a new `src/api/aws/adapter.ts` using the actual agreed backend routes. Put HTTP handling, base URL, response validation and error translation inside this folder.
 2. Preserve the models in `contracts.ts` (map AWS payloads here if their shapes differ), including cancellation, empty results, missing products and nullable estimates.

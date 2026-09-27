@@ -5,6 +5,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme/theme";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import Rfq, { RfqConfirmation } from "./pages/Rfq";
 import Catalog from "./pages/Catalog";
 import ProductDetail from "./pages/ProductDetail";
 import { Help, InfoPage, OurWork, RequestQuote } from "./pages/Supporting";
@@ -29,7 +30,12 @@ function AppRoutes() {
         <Route path="awards-plaques" element={<Catalog awards />} />
         <Route path="our-work" element={<OurWork />} />
         <Route path="help" element={<Help />} />
-        <Route path="request-quote" element={<RequestQuote />} />
+        <Route path="request-quote" element={<Rfq />} />
+        <Route
+          path="request-quote/confirmation/:id"
+          element={<RfqConfirmation />}
+        />
+        <Route path="quote-preview" element={<RequestQuote />} />
         <Route path="*" element={<InfoPage />} />
       </Route>
     </Routes>

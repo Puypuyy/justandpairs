@@ -57,4 +57,4 @@ Hierarchy: family → category → product → options → SKU. Customer cards d
 
 ## AWS later
 
-All pages still read through `src/api`. Keep editing static files while the mock is active. When your backend is ready, implement the same `CustomerApi` contract and switch `src/api/client.ts`. No AWS credentials or assumed endpoints have been added. Quote submission remains an explicit MVP placeholder; no request is sent.
+All pages still read through `src/api`. Keep editing static files while the mock is active. When your backend is ready, implement the same `CustomerApi` contract and switch `src/api/client.ts`. No AWS credentials or assumed endpoints have been added. The MVP 1.5 guided RFQ saves a local draft and demo receipt through `api.rfq`; no request is sent to Just and Pairs. See `docs/CUSTOMER_MVP_1_5.md` for the workflow and storage limits.

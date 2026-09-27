@@ -27,12 +27,7 @@ import {
 } from "lucide-react";
 import type { Configuration, Product } from "../api";
 import { usePriceEstimate, useSiteData } from "../api/react";
-import {
-  Breadcrumb,
-  ProductCard,
-  SectionHeading,
-  Action,
-} from "../components/common";
+import { Breadcrumb, ProductCard, SectionHeading } from "../components/common";
 import Estimate from "../components/Estimate";
 import {
   localDate,
@@ -88,7 +83,9 @@ export default function ProductDetail({ product }: { product: Product }) {
   }
   function request() {
     if (!configurable) {
-      navigate(quoteUrl);
+      navigate(quoteUrl, {
+        state: { config, variantId, rfqEntryId: crypto.randomUUID() },
+      });
       return;
     }
     const next = validateConfiguration(config, product);
@@ -104,9 +101,13 @@ export default function ProductDetail({ product }: { product: Product }) {
     if (reading) return;
     try {
       saveConfiguration(config);
-      navigate("/request-quote", { state: { config } });
+      navigate("/request-quote", {
+        state: { config, variantId, rfqEntryId: crypto.randomUUID() },
+      });
     } catch {
-      navigate("/request-quote", { state: { config } });
+      navigate("/request-quote", {
+        state: { config, variantId, rfqEntryId: crypto.randomUUID() },
+      });
     }
   }
   async function chooseFile(file?: File) {
@@ -571,7 +572,9 @@ export default function ProductDetail({ product }: { product: Product }) {
                 {product.specificationNote ||
                   "Available sizes, finishes and pricing are confirmed with your quotation."}
               </p>
-              <Action to={quoteUrl}>Request a Quote</Action>
+              <Button variant="contained" onClick={request}>
+                Request a Quote
+              </Button>
             </div>
           )}
         </div>

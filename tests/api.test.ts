@@ -5,7 +5,8 @@ import { join } from "node:path";
 import { api, ApiError } from "../src/api/index.ts";
 import { createMockApi } from "../src/api/mock/adapter.ts";
 
-const client = createMockApi({ latencyMs: 0 });
+import { demoProducts } from "./fixtures/products.ts";
+const client = createMockApi({ latencyMs: 0, products: demoProducts });
 
 test("public client delivers shared content asynchronously", async () => {
   const pending = api.getSiteData();
