@@ -9,7 +9,11 @@ export type Product = {
   shortDescription: string;
   image: string;
   imagePosition?: string;
-  basePrice?: number;
+  basePrice?: number | null;
+  imageKind?: "concept" | "reference";
+  material?: string | null;
+  specificationNote?: string;
+  variants?: { id: string; name: string; sku: string; image: string }[];
   featured?: boolean;
   sizes: number[];
   finishes: string[];

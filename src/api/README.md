@@ -7,7 +7,7 @@ React pages/components
     → api/react.tsx (shared data and request hooks)
     → api/client.ts (the active CustomerApi implementation)
     → api/mock/adapter.ts (asynchronous imitation API)
-    → api/mock/data.ts, content.ts, pricing.ts
+    → api/mock/data/ (editable records), content.ts, pricing.ts
 ```
 
 ## Public usage
@@ -48,7 +48,11 @@ Every method accepts an optional `{ signal: AbortSignal }`. A missing product re
 
 ## Static data today
 
-- `mock/data.ts`: products, categories, occasions, product options, portfolio, process steps, image paths.
+- `mock/data/products.ts`: your product records. Start here. See [the editing guide](mock/data/EDITING-GUIDE.md).
+- `mock/data/demo-products.ts`: the original sample products and prices.
+- `mock/data/`: separate categories/families, occasions, options and site content files.
+- `mock/data.ts`: assembles the records for the API.
+- `naming.ts`: dimension formatting and structured internal configuration SKUs.
 - `mock/content.ts`: help and informational page content.
 - `mock/pricing.ts`: illustrative price rules; never imported by UI.
 - `mock/filtering.ts`: simulated server-side filtering and sorting.

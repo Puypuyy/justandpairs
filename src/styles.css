@@ -2076,3 +2076,10 @@ dd {
     height: 184px;
   }
 }
+
+/* Supplied portrait designs stay fully visible on cards and detail pages. */
+.product-card .product-image.reference-image > img,
+.gallery-main.reference-image > img { object-fit: contain; object-position: center; background: #f1f2f2; }
+.gallery-thumbnails img { object-fit: contain; }
+.quote-options { padding: 24px 0; border-top: 1px solid #e5e3dc; }
+.quote-options p { margin-bottom: 20px; }

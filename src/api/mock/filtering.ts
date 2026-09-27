@@ -1,8 +1,11 @@
 import type { Product, ProductFilters as Filters } from "../contracts.ts";
+import { categories } from "./data/categories.ts";
 export function filterProducts(products: Product[], f: Filters) {
   const result = products.filter(
     (p) =>
       (!f.category || p.category === f.category) &&
+      (!f.family ||
+        categories.find((c) => c.slug === p.category)?.family === f.family) &&
       (!f.awards ||
         ["plaques", "glass-awards", "trophies-medals"].includes(p.category)) &&
       (!f.occasion || p.occasionTags.includes(f.occasion)) &&

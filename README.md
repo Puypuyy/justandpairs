@@ -28,7 +28,11 @@ Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `
 - `src/components/`: reusable shell, product cards, actions and estimate.
 - `src/pages/`: customer routes.
 
-Pricing is illustrative. The two generated concept images in `public/images/` are placeholders, not actual products or customer work. Gallery angles are explicitly marked as future photography. Replace image paths and mock data before production. JPG/PNG/PDF local previews are limited to 2 MB to fit browser session storage. Files and choices clear with the session; no backend storage exists.
+Your supplied images are in `public/images/products/`: 29 unique images represent 28 products (clear and blue geometric panels share one product). Names describe visible designs; dimensions, construction, supported finishes and prices remain unconfirmed and use the quote preview. Original demo products and their illustrative pricing are separate.
+
+**Edit your products:** [products.ts](src/api/mock/data/products.ts). Follow the [catalog editing guide](src/api/mock/data/EDITING-GUIDE.md) for names, image paths, variants, prices and options. The [image source map](src/api/mock/data/IMAGE-SOURCES.md) tracks all 32 originals and the three duplicates.
+
+The original two generated concept images are still used for demo records and marketing examples, not completed customer work. JPG/PNG/PDF local previews are limited to 2 MB to fit browser session storage. Files and choices clear with the session; no backend storage exists.
 
 The hosted version is a static SPA; the host must serve `index.html` for unknown app paths. `.openai/hosting.json` declares `dist` as the static output. Google Fonts supplies Manrope and Inter with local fallback stacks.
 

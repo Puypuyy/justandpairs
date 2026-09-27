@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   Accordion,
   AccordionDetails,
@@ -40,13 +40,26 @@ import {
   saveConfiguration,
   validateConfiguration,
 } from "../utils/configuration";
+import { formatSize } from "../api";
 import { money } from "../utils/formatting";
 export default function ProductDetail({ product }: { product: Product }) {
-  const { finishes, occasions, products, sizeGuidance } = useSiteData();
+  const { finishes, occasions, products, sizeGuidance, categories, families } =
+    useSiteData();
   const [config, setConfig] = useState<Configuration>(() =>
     readConfiguration(product),
   );
-  const [view, setView] = useState("Front view");
+  const [params, setParams] = useSearchParams();
+  const variantId =
+    product.variants?.find((v) => v.id === params.get("variant"))?.id ??
+    product.variants?.[0]?.id ??
+    "";
+  const setVariantId = (id: string) =>
+    setParams({ variant: id }, { replace: true });
+  const variant = product.variants?.find((v) => v.id === variantId);
+  const image = variant?.image ?? product.image;
+  const category = categories.find((c) => c.slug === product.category);
+  const family = families.find((f) => f.slug === category?.family);
+  const quoteUrl = `/request-quote?${new URLSearchParams({ product: product.slug, ...(variant ? { variant: variant.id } : {}) })}`;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [toast, setToast] = useState("");
   const [fileError, setFileError] = useState("");
@@ -75,7 +88,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   }
   function request() {
     if (!configurable) {
-      navigate(`/request-quote?product=${product.slug}`);
+      navigate(quoteUrl);
       return;
     }
     const next = validateConfiguration(config, product);
@@ -136,61 +149,43 @@ export default function ProductDetail({ product }: { product: Product }) {
     >
       <Breadcrumb
         current={product.name}
-        parent="Awards & Plaques"
-        parentTo="/awards-plaques"
+        parent={category?.name}
+        parentTo={`/products/${product.category}`}
       />
       <div className="detail-layout">
         <div className="gallery-column">
           <div className="gallery-sticky">
             <div
-              className={`gallery-main view-${view.toLowerCase().split(" ")[0]}`}
+              className={`gallery-main ${product.imageKind === "reference" ? "reference-image" : ""}`}
             >
-              {view === "Front view" ? (
-                <img
-                  src={product.image}
-                  alt={`Illustrative concept for ${product.name}`}
-                />
-              ) : (
-                <div className="gallery-placeholder">
-                  <Ruler size={40} />
-                  <h3>{view}</h3>
-                  <p>
-                    {view === "Size reference"
-                      ? `${config.size} × ${config.size} inches selected. Dimensions are illustrative.`
-                      : "Detailed product photography will be added here."}
-                  </p>
-                </div>
-              )}
+              <img
+                src={image}
+                alt={`${product.name}${variant ? ` — ${variant.name}` : ""}`}
+              />
               <span className="image-label">
-                Illustrative concept · Final design may vary
+                {product.imageKind === "reference"
+                  ? "Design reference · Personalization shown is an example"
+                  : "Illustrative concept · Final design may vary"}
               </span>
             </div>
-            <div
-              className="gallery-thumbnails"
-              aria-label="Product image views"
-            >
-              {[
-                "Front view",
-                "Angled view",
-                "Glass detail",
-                "Customized example",
-                "Size reference",
-              ].map((v) => (
-                <button
-                  key={v}
-                  aria-pressed={view === v}
-                  onClick={() => setView(v)}
-                  className={view === v ? "selected" : ""}
-                >
-                  {v === "Front view" ? (
-                    <img src={product.image} alt="Front concept" />
-                  ) : (
-                    <Ruler size={24} />
-                  )}
-                  <span>{v}</span>
-                </button>
-              ))}
-            </div>
+            {product.variants && (
+              <div
+                className="gallery-thumbnails"
+                aria-label="Product design options"
+              >
+                {product.variants.map((v) => (
+                  <button
+                    key={v.id}
+                    aria-pressed={variantId === v.id}
+                    onClick={() => setVariantId(v.id)}
+                    className={variantId === v.id ? "selected" : ""}
+                  >
+                    <img src={v.image} alt={v.name} />
+                    <span>{v.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
             <p className="fine-print">
               A starting point for your own recognition piece. Product
               photography and specifications will be confirmed with your quote.
@@ -209,9 +204,7 @@ export default function ProductDetail({ product }: { product: Product }) {
         </div>
         <div className="configuration">
           <span className="eyebrow">
-            {product.category === "plaques"
-              ? "GLASS PLAQUE"
-              : product.category.replaceAll("-", " ").toUpperCase()}
+            {family?.name} / {category?.name}
           </span>
           <h1>{product.name}</h1>
           <p>{product.description}</p>
@@ -219,7 +212,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             {[
               [Sparkles, "Customizable Design"],
               [Ruler, "Multiple Sizes"],
-              [Palette, "Digital or Etched Finish"],
+              [Palette, "Print or Etched Finish"],
               [CheckCircle2, "Design Approval Included"],
             ]
               .slice(0, configurable ? 4 : 1)
@@ -269,14 +262,13 @@ export default function ProductDetail({ product }: { product: Product }) {
                       aria-pressed={config.size === size}
                       onClick={() => update("size", size)}
                     >
-                      {size} × {size}
+                      {formatSize(size)}
                       {config.size === size && <Check size={13} />}
                     </button>
                   ))}
                 </div>
                 <p className="option-guidance">
-                  {config.size} × {config.size} inches —{" "}
-                  {sizeGuidance[config.size]}
+                  {formatSize(config.size)} — {sizeGuidance[config.size]}
                 </p>
               </section>
               <section className="config-section">
@@ -284,27 +276,29 @@ export default function ProductDetail({ product }: { product: Product }) {
                   <span>02</span>Choose your finish
                 </h2>
                 <div className="finish-options">
-                  {finishes.map((f, i) => (
-                    <button
-                      className={
-                        config.finish === f.name
-                          ? "option finish-option selected"
-                          : "option finish-option"
-                      }
-                      aria-pressed={config.finish === f.name}
-                      key={f.name}
-                      onClick={() => update("finish", f.name)}
-                    >
-                      <span className={`finish-swatch swatch-${i}`}>
-                        <Palette size={21} />
-                      </span>
-                      <span>
-                        <strong>{f.name}</strong>
-                        <small>{f.description}</small>
-                      </span>
-                      {config.finish === f.name && <Check size={17} />}
-                    </button>
-                  ))}
+                  {finishes
+                    .filter((f) => product.finishes.includes(f.name))
+                    .map((f, i) => (
+                      <button
+                        className={
+                          config.finish === f.name
+                            ? "option finish-option selected"
+                            : "option finish-option"
+                        }
+                        aria-pressed={config.finish === f.name}
+                        key={f.name}
+                        onClick={() => update("finish", f.name)}
+                      >
+                        <span className={`finish-swatch swatch-${i}`}>
+                          <Palette size={21} />
+                        </span>
+                        <span>
+                          <strong>{f.name}</strong>
+                          <small>{f.description}</small>
+                        </span>
+                        {config.finish === f.name && <Check size={17} />}
+                      </button>
+                    ))}
                 </div>
               </section>
               <section className="config-section" id="quantity">
@@ -567,9 +561,18 @@ export default function ProductDetail({ product }: { product: Product }) {
               </Link>
             </>
           ) : (
-            <Action to={`/request-quote?product=${product.slug}`}>
-              Request a Quote
-            </Action>
+            <div className="quote-options">
+              {variant && (
+                <p>
+                  <strong>Selected option:</strong> {variant.name}
+                </p>
+              )}
+              <p>
+                {product.specificationNote ||
+                  "Available sizes, finishes and pricing are confirmed with your quotation."}
+              </p>
+              <Action to={quoteUrl}>Request a Quote</Action>
+            </div>
           )}
         </div>
       </div>
@@ -625,11 +628,13 @@ export default function ProductDetail({ product }: { product: Product }) {
       <section className="section">
         <SectionHeading title="Made for moments like these." />
         <div className="occasion-links">
-          {occasions.slice(0, 4).map((o) => (
-            <Link key={o.slug} to={`/occasions/${o.slug}`}>
-              {o.name} →
-            </Link>
-          ))}
+          {occasions
+            .filter((o) => product.occasionTags.includes(o.slug))
+            .map((o) => (
+              <Link key={o.slug} to={`/occasions/${o.slug}`}>
+                {o.name} →
+              </Link>
+            ))}
         </div>
       </section>
       <section className="section related">

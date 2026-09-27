@@ -21,7 +21,8 @@ export function estimatePrice(
   config: Pick<Configuration, "size" | "finish" | "quantity">,
 ) {
   if (
-    product.basePrice === undefined ||
+    product.type !== "configurable" ||
+    product.basePrice == null ||
     !product.sizes.includes(config.size) ||
     !product.finishes.includes(config.finish) ||
     !Number.isInteger(config.quantity) ||
@@ -34,5 +35,6 @@ export function estimatePrice(
     pricingExamples.sizeAdjustments[config.size] +
     pricingExamples.finishAdjustments[config.finish];
   const total = unit * config.quantity;
+  if (!Number.isFinite(total)) return null;
   return { unit, total, deposit: total * pricingExamples.depositRate };
 }

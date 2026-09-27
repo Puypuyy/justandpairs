@@ -30,6 +30,7 @@ export function RequestQuote() {
     /* unavailable browser storage */
   }
   const chosen = products.find((p) => p.slug === params.get("product"));
+  const variant = chosen?.variants?.find((v) => v.id === params.get("variant"));
   const fromState = location.state?.config as Configuration | undefined;
   const product =
     chosen || products.find((p) => p.id === (fromState?.productId || last));
@@ -105,6 +106,7 @@ export function RequestQuote() {
           {chosen && (
             <div className="saved-details">
               <h3>{chosen.name}</h3>
+              {variant && <p>Selected option: {variant.name}</p>}
               <p>
                 This piece will be quoted to your requirements when requests
                 become available.
@@ -113,7 +115,9 @@ export function RequestQuote() {
           )}
           <div className="button-row">
             {product && (
-              <Action to={`/products/${product.slug}`}>
+              <Action
+                to={`/products/${product.slug}${variant ? `?variant=${encodeURIComponent(variant.id)}` : ""}`}
+              >
                 Return to your product
               </Action>
             )}
@@ -127,8 +131,8 @@ export function RequestQuote() {
         ) : (
           <div className="quote-image">
             <img
-              src={product?.image || awardImage}
-              alt="Illustrative recognition product concept"
+              src={variant?.image || product?.image || awardImage}
+              alt={product?.name || "Recognition product concept"}
             />
             <span>Made for your moment.</span>
           </div>

@@ -56,14 +56,17 @@ export function ProductCard({ product }: { product: Product }) {
   const { categories } = useSiteData();
   return (
     <article className="product-card">
-      <Link className="product-image" to={`/products/${product.slug}`}>
-        <img
-          src={product.image}
-          alt={`Illustrative ${product.name}`}
-          loading="lazy"
-        />
+      <Link
+        className={`product-image ${product.imageKind === "reference" ? "reference-image" : ""}`}
+        to={`/products/${product.slug}`}
+      >
+        <img src={product.image} alt={product.name} loading="lazy" />
         {product.badge && <span className="badge">{product.badge}</span>}
-        <span className="image-label">Concept image</span>
+        <span className="image-label">
+          {product.imageKind === "reference"
+            ? "Design reference"
+            : "Concept image"}
+        </span>
       </Link>
       <div className="product-copy">
         <span className="eyebrow">

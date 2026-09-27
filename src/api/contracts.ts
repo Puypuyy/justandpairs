@@ -2,15 +2,17 @@ import type { Configuration, Product } from "./types.ts";
 export type { Configuration, Product } from "./types.ts";
 
 export type Category = {
+  family: string;
   slug: string;
   name: string;
   description: string;
   image: string;
 };
-export type Occasion = Category & { position: string };
+export type Occasion = Omit<Category, "family"> & { position: string };
 export type Finish = { name: string; description: string };
 export type PortfolioItem = { name: string; type: string; image: string };
 export type SiteData = {
+  families: { slug: string; name: string }[];
   products: Product[];
   categories: Category[];
   occasions: Occasion[];
@@ -26,6 +28,7 @@ export type SiteData = {
   merchImage: string;
 };
 export type ProductFilters = {
+  family?: string;
   category?: string;
   occasion?: string;
   size?: string;

@@ -1,3 +1,4 @@
+import { formatSize } from "../api";
 import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -12,7 +13,8 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 import { useProducts, useSiteData } from "../api/react";
 import { Breadcrumb, ProductCard } from "../components/common";
 export default function Catalog({ awards = false }: { awards?: boolean }) {
-  const { categories, occasions, finishes, sizes, styles } = useSiteData();
+  const { categories, occasions, finishes, sizes, styles, families } =
+    useSiteData();
   const { category, occasion } = useParams();
   const [params, setParams] = useSearchParams();
   const [open, setOpen] = useState(false);
@@ -28,6 +30,7 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
     setParams(next, { replace: true });
   };
   const values = {
+    family: params.get("family") || "",
     category: category || params.get("category") || "",
     occasion: occasion || params.get("occasion") || "",
     size: params.get("size") || "",
@@ -53,6 +56,30 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
           Reset
         </Button>
       </div>
+      {!category && !awards && (
+        <TextField
+          select
+          label="Product family"
+          value={values.family}
+          onChange={(e) => {
+            const next = new URLSearchParams(params);
+            e.target.value
+              ? next.set("family", e.target.value)
+              : next.delete("family");
+            ["category", "size", "style", "finish"].forEach((key) =>
+              next.delete(key),
+            );
+            setParams(next);
+          }}
+        >
+          <MenuItem value="">All families</MenuItem>
+          {families.map((f) => (
+            <MenuItem key={f.slug} value={f.slug}>
+              {f.name}
+            </MenuItem>
+          ))}
+        </TextField>
+      )}
       {!category && (
         <TextField
           select
@@ -66,11 +93,17 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
           }}
         >
           <MenuItem value="">All products</MenuItem>
-          {categories.map((c) => (
-            <MenuItem key={c.slug} value={c.slug}>
-              {c.name}
-            </MenuItem>
-          ))}
+          {categories
+            .filter(
+              (c) =>
+                (!values.family || c.family === values.family) &&
+                (!awards || c.family === "awards-recognition"),
+            )
+            .map((c) => (
+              <MenuItem key={c.slug} value={c.slug}>
+                {c.name}
+              </MenuItem>
+            ))}
         </TextField>
       )}
       {!occasion && (
@@ -99,7 +132,7 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
             <MenuItem value="">All sizes</MenuItem>
             {sizes.map((s) => (
               <MenuItem key={s} value={s}>
-                {s} × {s}
+                {formatSize(s)}
               </MenuItem>
             ))}
           </TextField>

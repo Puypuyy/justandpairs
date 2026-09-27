@@ -1,3 +1,4 @@
+import { formatSize } from "../api";
 import { Alert, Button } from "@mui/material";
 import { ArrowRight } from "lucide-react";
 import type { Configuration, Product } from "../api";
@@ -36,7 +37,7 @@ export default function Estimate({
       )}
       <h3>{product.name}</h3>
       <p>
-        {config.size} × {config.size} inches · {config.finish}
+        {formatSize(config.size)} · {config.finish}
         <br />
         {config.quantity || "—"} {config.quantity === 1 ? "piece" : "pieces"}
       </p>
