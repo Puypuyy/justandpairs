@@ -25,8 +25,8 @@ import {
   Sparkles,
   Palette,
 } from "lucide-react";
-import type { Configuration, Product } from "../types/catalog";
-import { finishes, occasions, products, sizeGuidance } from "../data/catalog";
+import type { Configuration, Product } from "../api";
+import { usePriceEstimate, useSiteData } from "../api/react";
 import {
   Breadcrumb,
   ProductCard,
@@ -40,8 +40,9 @@ import {
   saveConfiguration,
   validateConfiguration,
 } from "../utils/configuration";
-import { estimatePrice, money } from "../utils/pricing";
+import { money } from "../utils/formatting";
 export default function ProductDetail({ product }: { product: Product }) {
+  const { finishes, occasions, products, sizeGuidance } = useSiteData();
   const [config, setConfig] = useState<Configuration>(() =>
     readConfiguration(product),
   );
@@ -51,7 +52,10 @@ export default function ProductDetail({ product }: { product: Product }) {
   const [fileError, setFileError] = useState("");
   const [reading, setReading] = useState(false);
   const navigate = useNavigate();
-  const estimate = estimatePrice(product, config);
+  const pricing = usePriceEstimate(
+    product.type === "configurable" ? config : undefined,
+  );
+  const estimate = pricing.data;
   const configurable = product.type === "configurable";
   useEffect(() => {
     try {
@@ -74,7 +78,7 @@ export default function ProductDetail({ product }: { product: Product }) {
       navigate(`/request-quote?product=${product.slug}`);
       return;
     }
-    const next = validateConfiguration(config);
+    const next = validateConfiguration(config, product);
     setErrors(next);
     if (Object.keys(next).length) {
       document
@@ -194,6 +198,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             {configurable && (
               <div className="desktop-estimate">
                 <Estimate
+                  pricing={pricing}
                   product={product}
                   config={config}
                   onRequest={request}
@@ -540,6 +545,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                 </p>
               </section>
               <Estimate
+                pricing={pricing}
                 product={product}
                 config={config}
                 onRequest={request}
@@ -642,7 +648,13 @@ export default function ProductDetail({ product }: { product: Product }) {
           <div>
             <small>Estimated total</small>
             <strong>
-              {estimate ? money(estimate.total) : "Choose options"}
+              {pricing.loading
+                ? "Updating…"
+                : pricing.error
+                  ? "Unavailable"
+                  : estimate
+                    ? money(estimate.total)
+                    : "Choose options"}
             </strong>
           </div>
           <Button variant="contained" onClick={request}>

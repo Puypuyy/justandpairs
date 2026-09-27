@@ -1,14 +1,4 @@
-import type { Product } from "../types/catalog.ts";
-export type Filters = {
-  category?: string;
-  occasion?: string;
-  size?: string;
-  style?: string;
-  finish?: string;
-  query?: string;
-  sort?: string;
-  awards?: boolean;
-};
+import type { Product, ProductFilters as Filters } from "../contracts.ts";
 export function filterProducts(products: Product[], f: Filters) {
   const result = products.filter(
     (p) =>

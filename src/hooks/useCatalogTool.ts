@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { categories } from "../data/catalog";
+import { useSiteData } from "../api/react";
 type Context = {
   registerTool: (
     tool: {
@@ -14,6 +14,7 @@ type Context = {
   ) => void | Promise<void>;
 };
 export function useCatalogTool() {
+  const { categories } = useSiteData();
   const navigate = useNavigate();
   useEffect(() => {
     const context = (document as Document & { modelContext?: Context })
@@ -72,5 +73,5 @@ export function useCatalogTool() {
       /* Optional browser capability. */
     }
     return () => lifecycle.abort();
-  }, [navigate]);
+  }, [navigate, categories]);
 }

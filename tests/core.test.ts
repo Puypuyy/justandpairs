@@ -1,12 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { estimatePrice } from "../src/utils/pricing.ts";
+import { estimatePrice } from "../src/api/mock/pricing.ts";
 import {
   initialConfiguration,
   validateConfiguration,
 } from "../src/utils/configuration.ts";
-import { filterProducts } from "../src/utils/catalog.ts";
-import type { Product } from "../src/types/catalog.ts";
+import { filterProducts } from "../src/api/mock/filtering.ts";
+import type { Product } from "../src/api/index.ts";
 const product: Product = {
   id: "test",
   sku: "JP-TEST",
@@ -57,20 +57,20 @@ test("invalid quantities and unsupported options never produce estimates", () =>
 });
 test("quote readiness requires date and design file when upload selected", () => {
   const c = initialConfiguration(product);
-  assert.ok(validateConfiguration(c).deadline);
+  assert.ok(validateConfiguration(c, product).deadline);
   c.deadline = "2099-01-01";
-  assert.deepEqual(validateConfiguration(c), {});
+  assert.deepEqual(validateConfiguration(c, product), {});
   c.design = "upload";
-  assert.ok(validateConfiguration(c).file);
+  assert.ok(validateConfiguration(c, product).file);
   c.file = {
     name: "test.pdf",
     type: "application/pdf",
     size: 1,
     data: "data:application/pdf;base64,AA==",
   };
-  assert.deepEqual(validateConfiguration(c), {});
+  assert.deepEqual(validateConfiguration(c, product), {});
   c.deadline = "2000-01-01";
-  assert.ok(validateConfiguration(c).deadline);
+  assert.ok(validateConfiguration(c, product).deadline);
 });
 test("filters intersect and sorting puts unknown prices last", () => {
   const other = {

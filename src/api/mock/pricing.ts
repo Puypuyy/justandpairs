@@ -1,4 +1,4 @@
-import type { Configuration, Product } from "../types/catalog.ts";
+import type { Configuration, Product } from "../types.ts";
 export const pricingExamples = {
   sizeAdjustments: {
     6: 0,
@@ -36,9 +36,3 @@ export function estimatePrice(
   const total = unit * config.quantity;
   return { unit, total, deposit: total * pricingExamples.depositRate };
 }
-export const money = (amount: number) =>
-  new Intl.NumberFormat("en-PH", {
-    style: "currency",
-    currency: "PHP",
-    maximumFractionDigits: 0,
-  }).format(amount);

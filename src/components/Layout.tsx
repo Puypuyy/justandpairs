@@ -19,7 +19,7 @@ import {
   UserRound,
   X,
 } from "lucide-react";
-import { categories, occasions, products } from "../data/catalog";
+import { useSiteData } from "../api/react";
 import { useCatalogTool } from "../hooks/useCatalogTool";
 export function Logo() {
   return (
@@ -34,6 +34,7 @@ export function Logo() {
   );
 }
 export default function Layout() {
+  const { categories, occasions, products } = useSiteData();
   useCatalogTool();
   const [drawer, setDrawer] = useState(false);
   const [menu, setMenu] = useState<{
@@ -245,6 +246,7 @@ export default function Layout() {
   );
 }
 function Footer() {
+  const { categories, occasions } = useSiteData();
   const groups = [
     {
       title: "Awards & Products",
@@ -313,7 +315,7 @@ function Footer() {
         </div>
         <div className="footer-bottom">
           <span>
-            Â© {new Date().getFullYear()} Just and Pairs. All rights reserved.
+            © {new Date().getFullYear()} Just and Pairs. All rights reserved.
           </span>
           <span>Thoughtfully made for meaningful moments.</span>
         </div>

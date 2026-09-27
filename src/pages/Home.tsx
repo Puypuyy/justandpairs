@@ -10,16 +10,17 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Action, ProductCard, SectionHeading } from "../components/common";
-import {
-  awardImage,
-  merchImage,
-  categories,
-  occasions,
-  portfolio,
-  products,
-  steps,
-} from "../data/catalog";
+import { useSiteData } from "../api/react";
 export default function Home() {
+  const {
+    awardImage,
+    merchImage,
+    categories,
+    occasions,
+    portfolio,
+    products,
+    steps,
+  } = useSiteData();
   return (
     <>
       <section className="hero">

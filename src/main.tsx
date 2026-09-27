@@ -8,33 +8,41 @@ import Home from "./pages/Home";
 import Catalog from "./pages/Catalog";
 import ProductDetail from "./pages/ProductDetail";
 import { Help, InfoPage, OurWork, RequestQuote } from "./pages/Supporting";
-import { products } from "./data/catalog";
+import { ApiProvider, useSiteData } from "./api/react";
 import "./styles.css";
+function AppRoutes() {
+  const { products } = useSiteData();
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="products" element={<Catalog />} />
+        {products.map((p) => (
+          <Route
+            key={p.id}
+            path={`products/${p.slug}`}
+            element={<ProductDetail key={p.id} product={p} />}
+          />
+        ))}
+        <Route path="products/:category" element={<Catalog />} />
+        <Route path="occasions/:occasion" element={<Catalog />} />
+        <Route path="awards-plaques" element={<Catalog awards />} />
+        <Route path="our-work" element={<OurWork />} />
+        <Route path="help" element={<Help />} />
+        <Route path="request-quote" element={<RequestQuote />} />
+        <Route path="*" element={<InfoPage />} />
+      </Route>
+    </Routes>
+  );
+}
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="products" element={<Catalog />} />
-            {products.map((p) => (
-              <Route
-                key={p.id}
-                path={`products/${p.slug}`}
-                element={<ProductDetail key={p.id} product={p} />}
-              />
-            ))}
-            <Route path="products/:category" element={<Catalog />} />
-            <Route path="occasions/:occasion" element={<Catalog />} />
-            <Route path="awards-plaques" element={<Catalog awards />} />
-            <Route path="our-work" element={<OurWork />} />
-            <Route path="help" element={<Help />} />
-            <Route path="request-quote" element={<RequestQuote />} />
-            <Route path="*" element={<InfoPage />} />
-          </Route>
-        </Routes>
+        <ApiProvider>
+          <AppRoutes />
+        </ApiProvider>
       </BrowserRouter>
     </ThemeProvider>
   );

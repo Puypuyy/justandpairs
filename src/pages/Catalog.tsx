@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { Button, Drawer, IconButton, MenuItem, TextField } from "@mui/material";
-import { Search, SlidersHorizontal, X } from "lucide-react";
 import {
-  categories,
-  finishes,
-  occasions,
-  products,
-  sizes,
-} from "../data/catalog";
+  Alert,
+  Button,
+  Drawer,
+  IconButton,
+  MenuItem,
+  TextField,
+} from "@mui/material";
+import { Search, SlidersHorizontal, X } from "lucide-react";
+import { useProducts, useSiteData } from "../api/react";
 import { Breadcrumb, ProductCard } from "../components/common";
-import { filterProducts } from "../utils/catalog";
 export default function Catalog({ awards = false }: { awards?: boolean }) {
+  const { categories, occasions, finishes, sizes, styles } = useSiteData();
   const { category, occasion } = useParams();
   const [params, setParams] = useSearchParams();
   const [open, setOpen] = useState(false);
@@ -36,7 +37,8 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
     sort: params.get("sort") || "featured",
     awards,
   };
-  const found = filterProducts(products, values);
+  const results = useProducts(values);
+  const found = results.data ?? [];
   const unknown =
     (category && !activeCategory) || (occasion && !activeOccasion);
   const canFilterPlaques =
@@ -97,7 +99,7 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
             <MenuItem value="">All sizes</MenuItem>
             {sizes.map((s) => (
               <MenuItem key={s} value={s}>
-                {s} Ã— {s}
+                {s} × {s}
               </MenuItem>
             ))}
           </TextField>
@@ -108,13 +110,7 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
             onChange={(e) => update("style", e.target.value)}
           >
             <MenuItem value="">All styles</MenuItem>
-            {[
-              "Single Glass",
-              "Double Glass",
-              "With Base",
-              "Standing Plaque",
-              "Custom Shape",
-            ].map((s) => (
+            {styles.map((s) => (
               <MenuItem value={s} key={s}>
                 {s}
               </MenuItem>
@@ -179,7 +175,7 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
           <MenuItem value="featured">Featured</MenuItem>
           <MenuItem value="price-low">Price: low to high</MenuItem>
           <MenuItem value="price-high">Price: high to low</MenuItem>
-          <MenuItem value="name">Name: Aâ€“Z</MenuItem>
+          <MenuItem value="name">Name: A–Z</MenuItem>
         </TextField>
       </div>
       <div className="catalog-layout">
@@ -187,9 +183,22 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
         <div>
           <div className="catalog-count" role="status">
             {unknown ? 0 : found.length} products{" "}
-            <span>Sample catalog Â· Estimated prices</span>
+            <span>Sample catalog · Estimated prices</span>
           </div>
-          {!unknown && found.length ? (
+          {results.loading ? (
+            <p role="status">Loading products…</p>
+          ) : results.error ? (
+            <Alert
+              severity="error"
+              action={
+                <Button color="inherit" onClick={results.retry}>
+                  Try again
+                </Button>
+              }
+            >
+              We couldn't load these products.
+            </Alert>
+          ) : !unknown && found.length ? (
             <div className="catalog-products">
               {found.map((p) => (
                 <ProductCard key={p.id} product={p} />

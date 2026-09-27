@@ -1,4 +1,4 @@
-import type { Product } from "../types/catalog";
+import type { Product } from "../types.ts";
 export const awardImage = "/images/awards-studio.png";
 export const merchImage = "/images/merchandise-studio.png";
 export const categories = [
@@ -243,4 +243,12 @@ export const steps = [
     title: "Ready for your event",
     text: "Pick it up or arrange your preferred courier.",
   },
+];
+
+export const styles = [
+  "Single Glass",
+  "Double Glass",
+  "With Base",
+  "Standing Plaque",
+  "Custom Shape",
 ];

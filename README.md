@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `npm test` checks pricing, validation and catalog behavior. Node 22.13 or newer is recommended for the test runner. Scripts call Node directly to support the ampersand in this Windows workspace path.
+Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `npm test` checks pricing, validation, API contracts, cancellation, response isolation and API import boundaries. Node 22.13 or newer is recommended for the test runner. Scripts call Node directly to support the ampersand in this Windows workspace path.
 
 ## Scope
 
@@ -23,8 +23,8 @@ Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `
 ## Structure
 
 - `src/theme/`: centralized MUI brand tokens and control styles.
-- `src/data/catalog.ts`: mock categories, occasions, products, options, portfolio and process copy.
-- `src/utils/`: replaceable pricing service, filtering and configuration validation/persistence.
+- `src/api/`: centralized asynchronous data API, static mock adapter, models and React hooks. See [API usage and AWS migration](src/api/README.md).
+- `src/utils/`: display formatting and local configuration validation/persistence. Pricing and filtering live behind the API.
 - `src/components/`: reusable shell, product cards, actions and estimate.
 - `src/pages/`: customer routes.
 

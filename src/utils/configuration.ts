@@ -1,9 +1,9 @@
-import type { Configuration, Product } from "../types/catalog.ts";
+import type { Configuration, Product } from "../api/index.ts";
 export function initialConfiguration(product: Product): Configuration {
   return {
     productId: product.id,
-    size: 6,
-    finish: "Full-Color Print",
+    size: product.sizes[0] ?? 0,
+    finish: product.finishes[0] ?? "",
     quantity: 1,
     title: "",
     recipient: "",
@@ -19,11 +19,12 @@ export function initialConfiguration(product: Product): Configuration {
 }
 export function validateConfiguration(
   c: Configuration,
+  product: Product,
 ): Record<string, string> {
   const errors: Record<string, string> = {};
-  if (![6, 7, 8, 9, 10, 11, 12].includes(c.size))
+  if (!product.sizes.includes(c.size))
     errors.size = "Choose a plaque size to continue.";
-  if (!["Full-Color Print", "Etched", "Colored Etching"].includes(c.finish))
+  if (!product.finishes.includes(c.finish))
     errors.finish = "Choose a finish to continue.";
   if (!Number.isInteger(c.quantity) || c.quantity < 1 || c.quantity > 9999)
     errors.quantity = "Enter a whole quantity from 1 to 9,999.";

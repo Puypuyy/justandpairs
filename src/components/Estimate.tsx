@@ -1,22 +1,39 @@
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { ArrowRight } from "lucide-react";
-import type { Configuration, Product } from "../types/catalog";
-import { estimatePrice, money } from "../utils/pricing";
+import type { Configuration, Product } from "../api";
+import { money } from "../utils/formatting";
+import type { ApiResult } from "../api/react";
+import type { PriceEstimate } from "../api";
 export default function Estimate({
   product,
   config,
+  pricing,
   onRequest,
   onSave,
 }: {
   product: Product;
   config: Configuration;
+  pricing: ApiResult<PriceEstimate | null>;
   onRequest?: () => void;
   onSave?: () => void;
 }) {
-  const estimate = estimatePrice(product, config);
+  const estimate = pricing.data;
   return (
     <div className="estimate">
       <span className="eyebrow">YOUR ESTIMATE</span>
+      {pricing.loading && <p role="status">Updating your estimate…</p>}
+      {pricing.error && (
+        <Alert
+          severity="error"
+          action={
+            <Button color="inherit" onClick={pricing.retry}>
+              Retry
+            </Button>
+          }
+        >
+          Your estimate is temporarily unavailable.
+        </Alert>
+      )}
       <h3>{product.name}</h3>
       <p>
         {config.size} × {config.size} inches · {config.finish}

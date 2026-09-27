@@ -1,9 +1,9 @@
 import { Button } from "@mui/material";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { Product } from "../types/catalog";
-import { categories } from "../data/catalog";
-import { money } from "../utils/pricing";
+import type { Product } from "../api";
+import { useSiteData } from "../api/react";
+import { money } from "../utils/formatting";
 export function Action({
   to,
   children,
@@ -53,6 +53,7 @@ export function SectionHeading({
   );
 }
 export function ProductCard({ product }: { product: Product }) {
+  const { categories } = useSiteData();
   return (
     <article className="product-card">
       <Link className="product-image" to={`/products/${product.slug}`}>
