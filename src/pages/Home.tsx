@@ -46,13 +46,10 @@ export default function Home() {
                 Explore Awards
               </Action>
             </div>
-            <Link
-              className="upload-link"
-              to="/products/double-glass-recognition-plaque#personalization"
-            >
+            <Link className="upload-link" to="/request-quote?mode=custom">
               <Upload size={15} />
               <span>
-                Already have a design? <u>Upload it with your request.</u>
+                Already have a design? <u>Add it with your request.</u>
               </span>
             </Link>
           </div>
@@ -67,7 +64,7 @@ export default function Home() {
             </span>
             <Link
               className="hero-caption"
-              to="/products/double-glass-recognition-plaque"
+              to="/products/geometric-panel-recognition-award"
             >
               <span>
                 <small>A MOMENT. A MILESTONE. A KEEPSAKE.</small>

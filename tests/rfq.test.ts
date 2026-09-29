@@ -106,6 +106,74 @@ test("RFQ progression validates each step and review catches invalid earlier ans
   draft.quantity = 0;
   assert.equal(firstInvalidRfqStep(draft, products, rfqPolicy), 2);
 });
+test("URL reopen without configuration preserves in-progress draft progress", () => {
+  const configuration = {
+    ...initialConfiguration(products.at(-1)!),
+    quantity: 7,
+    title: "Keep me",
+    design: "help" as const,
+    deadline: "2099-03-01",
+    rush: false,
+    delivery: "Pickup" as const,
+  };
+  let draft = applyRfqEntry(
+    newRfqDraft("refresh"),
+    {
+      productId: "bespoke",
+      variantId: "blue",
+      configuration,
+      sourceKey: "uuid-handoff",
+    },
+    products,
+  );
+  draft = {
+    ...draft,
+    step: 4,
+    quantity: 12,
+    details: { ...draft.details, title: "Keep me", requestedSize: "8 in" },
+    artwork: { choice: "reference", idea: "Blue accents", files: [file] },
+  };
+  const restored = applyRfqEntry(
+    draft,
+    {
+      productId: "bespoke",
+      variantId: "blue",
+      sourceKey: "product:bespoke:blue",
+    },
+    products,
+  );
+  assert.equal(restored.step, 4);
+  assert.equal(restored.quantity, 12);
+  assert.equal(restored.details.title, "Keep me");
+  assert.equal(restored.details.requestedSize, "8 in");
+  assert.equal(restored.artwork.idea, "Blue accents");
+  assert.equal(restored.sourceKey, "product:bespoke:blue");
+  const firstOpen = applyRfqEntry(
+    newRfqDraft("fresh-url"),
+    {
+      productId: "bespoke",
+      variantId: "blue",
+      sourceKey: "product:bespoke:blue",
+    },
+    products,
+  );
+  assert.equal(firstOpen.productId, "bespoke");
+  assert.equal(firstOpen.variantId, "blue");
+  assert.equal(firstOpen.step, 1);
+  const rehanded = applyRfqEntry(
+    restored,
+    {
+      productId: "bespoke",
+      variantId: "clear",
+      configuration: { ...configuration, quantity: 99, title: "New handoff" },
+      sourceKey: "uuid-handoff-2",
+    },
+    products,
+  );
+  assert.equal(rehanded.quantity, 99);
+  assert.equal(rehanded.details.title, "New handoff");
+  assert.equal(rehanded.variantId, "clear");
+});
 test("product handoff preserves all known choices and same entry does not overwrite edits", () => {
   const configuration = {
     ...initialConfiguration(products[0]),

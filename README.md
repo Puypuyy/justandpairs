@@ -18,7 +18,8 @@ Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `
 - Configurable glass award pages with sizes, finishes, quantity, personalization, local file preview, deadline, delivery choice and estimate.
 - Guided seven-step RFQ with product handoff, local drafts, artwork previews, review/edit and local demo confirmation. No requests are transmitted.
 - Original quote preview retained at `/quote-preview`.
-- Help, concept portfolio and clear placeholders for future account, tracking and policy pages.
+- Complete static About, Contact, Terms and Privacy pages, plus Help, concept portfolio and a dedicated 404 page.
+- Clear placeholders remain only for future customer accounts and live order tracking.
 - No authentication, backend, payment, upload service or production workflows.
 
 ## Structure
@@ -30,6 +31,8 @@ Open the URL printed by Vite. `npm run build` type-checks and creates `dist/`. `
 - `src/pages/`: customer routes.
 
 See [Customer MVP 1.5 implementation report](docs/CUSTOMER_MVP_1_5.md) for routes, API contracts, persistence, tests, changed files and limitations. RFQ data is stored locally through the mock API; the rest of the platform and AWS integration have not begun.
+
+See [Customer MVP 1.6 static website report](docs/CUSTOMER_MVP_1_6.md) for the public information pages, metadata and remaining source-data constraints.
 
 Your supplied images are in `public/images/products/`: 29 unique images represent 28 products (clear and blue geometric panels share one product). Names describe visible designs; dimensions, construction, supported finishes and prices remain unconfirmed and use the quote preview. Original demo products and their illustrative pricing are separate.
 

@@ -65,21 +65,24 @@ export default function Rfq() {
   const entry = useMemo<RfqEntry>(() => {
     const selected =
       product ?? products.find((p) => p.id === incoming?.productId);
-    const configuration =
-      incoming ?? (selected ? readConfiguration(selected) : undefined);
+    // Only apply configuration from router state. Session-storage fallback on every
+    // open was re-handing off after refresh and overwriting in-progress RFQ drafts.
+    const routerHandoff = !!(location.state?.config || location.state?.rfqEntryId);
+    const variantId =
+      params.get("variant") || location.state?.variantId || undefined;
+    const stableKey = selected
+      ? `product:${selected.id}:${variantId || ""}`
+      : mode === "custom" || mode === "bulk"
+        ? `mode:${mode}`
+        : undefined;
     return {
       productId: selected?.id,
-      variantId:
-        params.get("variant") || location.state?.variantId || undefined,
-      configuration,
+      variantId,
+      configuration: incoming,
       mode: mode === "custom" || mode === "bulk" ? mode : undefined,
-      sourceKey:
-        location.state?.rfqEntryId ||
-        (selected
-          ? `${selected.id}:${params.get("variant") || ""}`
-          : mode
-            ? `mode:${mode}`
-            : undefined),
+      sourceKey: routerHandoff
+        ? String(location.state?.rfqEntryId || `handoff:${stableKey}`)
+        : stableKey,
     };
   }, [product, products, incoming, params, mode, location.state]);
   const key = JSON.stringify(entry);

@@ -1,7 +1,7 @@
 export const faq: [string, string][] = [
   [
     "How to Order",
-    "Browse a product, choose your size and finish, and personalize it. The Request Quote button saves your selections locally. Sending quote requests will be available in the next customer phase.",
+    "Browse a product or start with something custom, then use the guided request to record specifications, quantity, artwork, deadline, delivery and contact details. The completed demo request is saved only in this browser and is not transmitted.",
   ],
   [
     "Payments",
@@ -25,7 +25,7 @@ export const faq: [string, string][] = [
   ],
   [
     "Contact",
-    "Direct contact details will be added before quote requests open. In the meantime, browse the collection and save your product choices.",
+    "Verified phone, email, hours and location details will be published before direct enquiries open. For now, use the guided local request to prepare your requirements.",
   ],
 ];
 export const pageContent: Record<string, [string, string]> = {

@@ -62,9 +62,25 @@ export default function Layout() {
       products.find((p) => p.slug === slug)?.name ||
       categories.find((c) => c.slug === slug)?.name ||
       occasions.find((o) => o.slug === slug)?.name;
+    const pageMeta: Record<string, [string, string]> = {
+      "/": ["Just and Pairs | Custom Awards and Merchandise", "Custom plaques, awards and merchandise for achievements, events and moments worth remembering."],
+      "/products": ["Products | Just and Pairs", "Explore custom awards, plaques, trophies and merchandise from Just and Pairs."],
+      "/our-work": ["Our Work | Just and Pairs", "Explore recognition and merchandise concepts for corporate, school, sports and community occasions."],
+      "/help": ["Help | Just and Pairs", "Learn how quotations, design approval, payment, pickup and delivery work with Just and Pairs."],
+      "/about": ["About Just and Pairs", "Learn how Just and Pairs turns ideas into custom awards, recognition pieces and merchandise."],
+      "/contact": ["Contact | Just and Pairs", "Prepare your product, quantity, deadline and design requirements for Just and Pairs."],
+      "/terms": ["Website Terms | Just and Pairs", "Terms for using the current static Just and Pairs customer website preview."],
+      "/privacy": ["Privacy | Just and Pairs", "How the static Just and Pairs preview stores quotation drafts and selected files locally."],
+      "/request-quote": ["Request a Quote | Just and Pairs", "Prepare a guided local quotation request for a custom award, recognition piece or merchandise project."],
+    };
+    const meta = pageMeta[location.pathname];
     document.title = name
       ? `${name} | Just and Pairs`
-      : "Just and Pairs — Ideas made tangible.";
+      : meta?.[0] || "Page Not Found | Just and Pairs";
+    document.querySelector('meta[name="description"]')?.setAttribute(
+      "content",
+      meta?.[1] || "Explore custom awards, recognition pieces and merchandise from Just and Pairs.",
+    );
   }, [location.pathname, location.hash]);
   const menuItems = menu?.type === "products" ? categories : occasions;
   return (

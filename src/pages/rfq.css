@@ -1,5 +1,7 @@
 .rfq-page {
   padding-bottom: 80px;
+  max-width: 100%;
+  overflow-x: clip;
 }
 .rfq-title {
   max-width: 760px;
@@ -14,10 +16,15 @@
   gap: 40px;
   align-items: start;
   margin-top: 32px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 .rfq-sidebar {
   position: sticky;
   top: 110px;
+  min-width: 0;
+  max-width: 100%;
 }
 .rfq-sidebar ol {
   list-style: none;
@@ -229,17 +236,26 @@
 }
 @media (max-width: 900px) {
   .rfq-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
   }
   .rfq-sidebar {
     position: static;
+    width: 100%;
+  }
+  .rfq-sidebar nav {
+    max-width: 100%;
+    min-width: 0;
   }
   .rfq-sidebar ol {
     display: flex;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    width: 100%;
+    max-width: 100%;
     padding-bottom: 8px;
     margin-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
   }
   .rfq-sidebar li {
     flex: 0 0 auto;
@@ -251,16 +267,19 @@
 @media (max-width: 600px) {
   .rfq-panel {
     padding: 20px 16px;
+    max-width: 100%;
   }
   .rfq-grid,
   .rfq-review {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .rfq-actions {
     gap: 8px;
+    flex-wrap: wrap;
   }
   .rfq-actions button {
     font-size: 14px;
+    flex: 1 1 auto;
   }
   .rfq-chosen {
     align-items: start;

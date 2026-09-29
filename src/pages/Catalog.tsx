@@ -216,7 +216,7 @@ export default function Catalog({ awards = false }: { awards?: boolean }) {
         <div>
           <div className="catalog-count" role="status">
             {unknown ? 0 : found.length} products{" "}
-            <span>Sample catalog · Estimated prices</span>
+            <span>Design catalog · Pricing confirmed on quotation</span>
           </div>
           {results.loading ? (
             <p role="status">Loading products…</p>

@@ -78,10 +78,22 @@ export function applyRfqEntry(
   products: Product[],
 ): RfqDraft {
   if (!entry.sourceKey || entry.sourceKey === draft.sourceKey) return draft;
-  let next = { ...draft, sourceKey: entry.sourceKey, acknowledged: false };
   const product = products.find(
     (p) => p.id === (entry.productId || entry.configuration?.productId),
   );
+  // Refresh and URL reopen must not wipe an in-progress draft when the URL only
+  // restates the same product/mode and no new router-state configuration arrived.
+  if (!entry.configuration) {
+    const sameCustom = entry.mode === "custom" && draft.selection === "custom";
+    const sameBulk = entry.mode === "bulk" && !!draft.sourceKey;
+    const sameProduct =
+      !!product &&
+      draft.productId === product.id &&
+      (!entry.variantId || entry.variantId === draft.variantId);
+    if (sameCustom || sameBulk || sameProduct)
+      return { ...draft, sourceKey: entry.sourceKey };
+  }
+  let next = { ...draft, sourceKey: entry.sourceKey, acknowledged: false };
   if (entry.mode === "custom") next = selectRfqProduct(next);
   else if (product) {
     next = selectRfqProduct(next, product);

@@ -241,8 +241,9 @@ export default function ProductDetail({ product }: { product: Product }) {
               <>
                 <strong>Made for your requirements.</strong>
                 <small>
-                  Share your preferred sizes, quantities and design in the next
-                  customer phase.
+                  Share your preferred sizes, quantities and design in a quote
+                  request. Pricing and specifications stay unconfirmed until
+                  quotation.
                 </small>
               </>
             )}
@@ -620,12 +621,13 @@ export default function ProductDetail({ product }: { product: Product }) {
         </div>
       </section>
       <section className="next-steps">
-        <h2>What happens after you send your request?</h2>
+        <h2>What happens after a real quotation request?</h2>
         <p>
-          Once quote requests are available, we review your details, confirm
-          your quotation, and prepare a design for your approval. Production
-          follows your approval and deposit, with a quality check before
-          release.
+          This site currently saves a local demo request in your browser only.
+          When online requests are connected, Just and Pairs will review your
+          details, confirm a quotation, and prepare a design for your approval.
+          Production follows your approval and deposit, with a quality check
+          before release.
         </p>
       </section>
       <section className="section">
