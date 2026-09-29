@@ -2083,6 +2083,7 @@ dd {
 .gallery-thumbnails img { object-fit: contain; }
 .quote-options { padding: 24px 0; border-top: 1px solid #e5e3dc; }
 .quote-options p { margin-bottom: 20px; }
+.route-loading { min-height: 45vh; display: grid; place-items: center; color: #667085; }
 
 /* Static customer pages */
 .static-page { background: #fff; }

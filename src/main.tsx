@@ -1,26 +1,59 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme/theme";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import Rfq, { RfqConfirmation } from "./pages/Rfq";
-import Catalog from "./pages/Catalog";
-import ProductDetail from "./pages/ProductDetail";
-import { Help, InfoPage, OurWork, RequestQuote } from "./pages/Supporting";
-import {
-  About,
-  Contact,
-  NotFound,
-  Privacy,
-  Terms,
-} from "./pages/StaticPages";
 import { ApiProvider, useSiteData } from "./api/react";
 import "./styles.css";
+const Catalog = lazy(() => import("./pages/Catalog"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const Rfq = lazy(() => import("./pages/Rfq"));
+const RfqConfirmation = lazy(() =>
+  import("./pages/Rfq").then((module) => ({
+    default: module.RfqConfirmation,
+  })),
+);
+const Help = lazy(() =>
+  import("./pages/Supporting").then((module) => ({ default: module.Help })),
+);
+const InfoPage = lazy(() =>
+  import("./pages/Supporting").then((module) => ({
+    default: module.InfoPage,
+  })),
+);
+const OurWork = lazy(() =>
+  import("./pages/Supporting").then((module) => ({
+    default: module.OurWork,
+  })),
+);
+const RequestQuote = lazy(() =>
+  import("./pages/Supporting").then((module) => ({
+    default: module.RequestQuote,
+  })),
+);
+const staticPage = (name: "About" | "Contact" | "NotFound" | "Privacy" | "Terms") =>
+  lazy(() =>
+    import("./pages/StaticPages").then((module) => ({
+      default: module[name],
+    })),
+  );
+const About = staticPage("About");
+const Contact = staticPage("Contact");
+const NotFound = staticPage("NotFound");
+const Privacy = staticPage("Privacy");
+const Terms = staticPage("Terms");
 function AppRoutes() {
   const { products } = useSiteData();
   return (
+    <Suspense
+      fallback={
+        <div className="container route-loading" role="status">
+          Loading page...
+        </div>
+      }
+    >
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<Home />} />
@@ -52,6 +85,7 @@ function AppRoutes() {
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
+    </Suspense>
   );
 }
 function App() {

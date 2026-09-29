@@ -60,7 +60,7 @@ export function ProductCard({ product }: { product: Product }) {
         className={`product-image ${product.imageKind === "reference" ? "reference-image" : ""}`}
         to={`/products/${product.slug}`}
       >
-        <img src={product.image} alt={product.name} loading="lazy" />
+        <img src={product.image} alt={product.name} loading="lazy" decoding="async" />
         {product.badge && <span className="badge">{product.badge}</span>}
         <span className="image-label">
           {product.imageKind === "reference"

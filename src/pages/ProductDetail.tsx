@@ -162,6 +162,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <img
                 src={image}
                 alt={`${product.name}${variant ? ` — ${variant.name}` : ""}`}
+                decoding="async"
               />
               <span className="image-label">
                 {product.imageKind === "reference"
@@ -181,7 +182,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                     onClick={() => setVariantId(v.id)}
                     className={variantId === v.id ? "selected" : ""}
                   >
-                    <img src={v.image} alt={v.name} />
+                    <img src={v.image} alt={v.name} loading="lazy" decoding="async" />
                     <span>{v.name}</span>
                   </button>
                 ))}
@@ -425,6 +426,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                           <img
                             src={config.file.data}
                             alt="Your selected design preview"
+                            decoding="async"
                           />
                         ) : (
                           <FileText size={32} />

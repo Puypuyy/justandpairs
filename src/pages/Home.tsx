@@ -58,6 +58,7 @@ export default function Home() {
               src={awardImage}
               alt="Concept of clear glass recognition plaques with gold details on warm stone plinths"
               fetchPriority="high"
+              decoding="async"
             />
             <span className="hero-note">
               <Sparkles size={15} /> Made to mean more.
@@ -116,6 +117,7 @@ export default function Home() {
                   alt={`${o.name} concept inspiration`}
                   style={{ objectPosition: o.position }}
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div>
@@ -152,6 +154,7 @@ export default function Home() {
                   src={c.image}
                   alt={`${c.name} concept collection`}
                   loading="lazy"
+                  decoding="async"
                 />
                 <div>
                   <h3>{c.name}</h3>
@@ -209,6 +212,7 @@ export default function Home() {
             src={merchImage}
             alt="Concept collection of custom team apparel and thoughtful merchandise"
             loading="lazy"
+            decoding="async"
           />
         </div>
       </section>
@@ -242,6 +246,7 @@ export default function Home() {
                   src={p.image}
                   alt={`${p.name} illustrative concept`}
                   loading="lazy"
+                  decoding="async"
                 />
                 <span className="eyebrow">CONCEPT SHOWCASE</span>
                 <h3>

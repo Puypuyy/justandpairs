@@ -145,6 +145,7 @@ export function RequestQuote() {
             <img
               src={variant?.image || product?.image || awardImage}
               alt={product?.name || "Recognition product concept"}
+              decoding="async"
             />
             <span>Made for your moment.</span>
           </div>
@@ -181,7 +182,7 @@ export function OurWork() {
           .filter((p) => filter === "All" || p.type === filter)
           .map((p) => (
             <article key={p.name}>
-              <img src={p.image} alt={`${p.name} illustrative concept`} />
+              <img src={p.image} alt={`${p.name} illustrative concept`} loading="lazy" decoding="async" />
               <span className="eyebrow">CONCEPT SHOWCASE</span>
               <h2>{p.name}</h2>
               <p>A starting point for something that's distinctly yours.</p>

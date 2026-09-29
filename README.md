@@ -34,6 +34,8 @@ See [Customer MVP 1.5 implementation report](docs/CUSTOMER_MVP_1_5.md) for route
 
 See [Customer MVP 1.6 static website report](docs/CUSTOMER_MVP_1_6.md) for the public information pages, metadata and remaining source-data constraints.
 
+See [Customer MVP 1.7 static delivery report](docs/CUSTOMER_MVP_1_7.md) for route-level loading, image loading and static-host fallback behavior.
+
 Your supplied images are in `public/images/products/`: 29 unique images represent 28 products (clear and blue geometric panels share one product). Names describe visible designs; dimensions, construction, supported finishes and prices remain unconfirmed and use the quote preview. Original demo products and their illustrative pricing are separate.
 
 **Edit your products:** [products.ts](src/api/mock/data/products.ts). Follow the [catalog editing guide](src/api/mock/data/EDITING-GUIDE.md) for names, image paths, variants, prices and options. The [image source map](src/api/mock/data/IMAGE-SOURCES.md) tracks all 32 originals and the three duplicates.

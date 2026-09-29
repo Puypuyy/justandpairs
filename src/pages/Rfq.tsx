@@ -455,7 +455,7 @@ function RfqForm({
                   </TextField>
                   {product && (
                     <div className="rfq-chosen">
-                      <img src={product.image} alt={product.name} />
+                      <img src={product.image} alt={product.name} loading="lazy" decoding="async" />
                       <div>
                         <h3>{product.name}</h3>
                         <p>{product.shortDescription}</p>
@@ -694,7 +694,7 @@ function RfqForm({
                   {draft.artwork.files.map((f) => (
                     <div className="rfq-file" key={f.id}>
                       {f.type.startsWith("image/") ? (
-                        <img src={f.data} alt={`Local preview of ${f.name}`} />
+                        <img src={f.data} alt={`Local preview of ${f.name}`} decoding="async" />
                       ) : (
                         <FileText size={32} />
                       )}
