@@ -18,6 +18,7 @@ import { Action, Breadcrumb, SectionHeading } from "../components/common";
 import { usePriceEstimate, useSiteData } from "../api/react";
 import type { Configuration } from "../api";
 import { readConfiguration } from "../utils/configuration";
+import { createId } from "../utils/id";
 import Estimate from "../components/Estimate";
 export function RequestQuote() {
   const { products, awardImage } = useSiteData();
@@ -121,7 +122,7 @@ export function RequestQuote() {
               state={{
                 config,
                 variantId: variant?.id,
-                rfqEntryId: crypto.randomUUID(),
+                rfqEntryId: createId(),
               }}
             >
               Continue to guided request

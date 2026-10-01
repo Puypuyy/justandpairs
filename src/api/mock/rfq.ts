@@ -9,6 +9,7 @@ import type {
 import { ApiError } from "../errors.ts";
 import { applyRfqEntry, newRfqDraft, validateRfq } from "../../domain/rfq.ts";
 import { estimatePrice } from "./pricing.ts";
+import { createId } from "../../utils/id.ts";
 
 // Only mock persistence lives here. UI never reads or writes transactional storage.
 export const rfqStorageKey = "jp_rfq_state_v1";
@@ -174,7 +175,7 @@ export function createRfqApi(
             "NOT_FOUND",
             "That product is no longer available. Start a custom request or choose another product.",
           );
-        const draft = state.draft ?? newRfqDraft(crypto.randomUUID());
+        const draft = state.draft ?? newRfqDraft(createId());
         const next = applyRfqEntry(draft, entry, products);
         if (!state.draft || next !== draft) return save(next, state);
         return draft;
@@ -213,7 +214,7 @@ export function createRfqApi(
         const stamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
         let reference: string;
         do {
-          reference = `JP-RFQ-${stamp}-${crypto.randomUUID().replaceAll("-", "").slice(0, 6).toUpperCase()}`;
+          reference = `JP-RFQ-${stamp}-${createId().replaceAll("-", "").slice(0, 6).toUpperCase()}`;
         } while (state.records.some((r) => r.reference === reference));
         const submitted = structuredClone(draft);
         // Keep file metadata in receipts, not repeated large preview bytes. No upload exists.

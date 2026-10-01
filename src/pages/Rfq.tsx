@@ -6,6 +6,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
+import { createId } from "../utils/id";
 import {
   Alert,
   Button,
@@ -101,7 +102,7 @@ export default function Rfq() {
         <Alert severity="warning">
           This product is no longer in the catalog.
         </Alert>
-        <Button component={Link} to="/request-quote" replace>
+        <Button component={Link} to="/project-details" replace>
           Choose another product
         </Button>
       </div>
@@ -238,7 +239,7 @@ function RfqForm({
               const reader = new FileReader();
               reader.onload = () =>
                 resolve({
-                  id: crypto.randomUUID(),
+                  id: createId(),
                   name: file.name,
                   type: file.type,
                   size: file.size,
@@ -283,7 +284,7 @@ function RfqForm({
       const saved = await autosave.saveNow();
       const record = await api.rfq.submit(saved);
       autosave.complete();
-      navigate(`/request-quote/confirmation/${record.id}`, { replace: true });
+      navigate(`/project-details/confirmation/${record.id}`, { replace: true });
     } catch (e) {
       setFailure(
         e instanceof Error
@@ -1009,7 +1010,7 @@ export function RfqConfirmation() {
           {result.error?.message || "No local request found."}
         </Alert>
         <Button onClick={result.retry}>Try again</Button>
-        <Button component={Link} to="/request-quote">
+        <Button component={Link} to="/project-details">
           Start a request
         </Button>
       </div>
@@ -1040,7 +1041,7 @@ export function RfqConfirmation() {
         removed after submission and were never uploaded.
       </p>
       <div className="button-row">
-        <Button component={Link} to="/request-quote" variant="contained">
+        <Button component={Link} to="/project-details" variant="contained">
           Start another request
         </Button>
         <Button component={Link} to="/products" variant="outlined">

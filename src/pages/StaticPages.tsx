@@ -13,6 +13,7 @@ import {
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { Action, Breadcrumb } from "../components/common";
+import { useSiteData } from "../api/react";
 
 const principles = [
   {
@@ -100,6 +101,7 @@ export function About() {
 }
 
 export function Contact() {
+  const { businessSettings } = useSiteData();
   return (
     <div className="static-page">
       <section className="container static-hero static-contact-hero">
@@ -129,8 +131,9 @@ export function Contact() {
       <section className="container section static-note">
         <CheckCircle2 size={24} />
         <div>
-          <h2>Direct contact details are being finalized.</h2>
-          <p>Verified phone, email, business hours and location details will be published here before online enquiries are enabled. No unverified contact information is displayed.</p>
+          <h2>{businessSettings.verified ? "Contact Just and Pairs" : "Business details awaiting verification"}</h2>
+          <div className="contact-details"><p><strong>Email</strong><br />{businessSettings.email}</p><p><strong>Phone</strong><br />{businessSettings.phone}</p><p><strong>Address</strong><br />{businessSettings.address}</p><p><strong>Hours</strong><br />{businessSettings.hours}</p></div>
+          {!businessSettings.verified && <p>These values are editable in the admin POC and must be verified before launch.</p>}
         </div>
       </section>
     </div>
@@ -138,6 +141,7 @@ export function Contact() {
 }
 
 export function Terms() {
+  const { homeContent } = useSiteData();
   return (
     <LegalPage title="Website terms" eyebrow="TERMS" icon={FileText}>
       <p>This website is currently a static customer preview. It allows you to browse products and prepare a quotation request locally, but it does not transmit an enquiry, create a binding quotation, accept an order or collect payment.</p>
@@ -149,6 +153,7 @@ export function Terms() {
       <p>Files selected in the request form are used only for a local browser preview. They are not uploaded. Keep an original copy of every file you intend to provide when direct submissions become available.</p>
       <h2>Orders and payment</h2>
       <p>Production begins only after the requirements, quotation, payment terms and design approval have been confirmed through an authorized Just and Pairs channel. This website does not currently take deposits or payments.</p>
+      {homeContent.policySummary && <><h2>Additional customer policy</h2><p>{homeContent.policySummary}</p></>}
     </LegalPage>
   );
 }

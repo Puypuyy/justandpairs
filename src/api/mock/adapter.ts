@@ -16,6 +16,24 @@ export function createMockApi({
   products?: Product[];
   storage?: RfqStorage;
 } = {}): CustomerApi {
+  let runtimeProducts = products;
+  let runtimeHomeContent = data.homeContent;
+  let runtimeBusinessSettings = data.businessSettings;
+  let runtimePortfolio = data.portfolio;
+  if (products === data.products && typeof localStorage !== "undefined") {
+    try {
+      const admin = JSON.parse(localStorage.getItem("jp_admin_poc_v1") || "{}");
+      if (Array.isArray(admin.products)) runtimeProducts = admin.products;
+      if (admin.content && typeof admin.content.heroTitle === "string")
+        runtimeHomeContent = { ...data.homeContent, ...admin.content };
+      if (admin.content?.featuredProjectName && admin.content?.featuredProjectImage)
+        runtimePortfolio = [{ name: admin.content.featuredProjectName, type: admin.content.featuredProjectType || "Approved work", image: admin.content.featuredProjectImage }, ...data.portfolio];
+      if (admin.settings && typeof admin.settings.businessName === "string")
+        runtimeBusinessSettings = { ...data.businessSettings, ...admin.settings };
+    } catch {
+      // Invalid POC overrides never prevent the customer site from loading.
+    }
+  }
   async function respond<T>(
     read: () => T,
     { signal }: RequestOptions = {},
@@ -39,24 +57,24 @@ export function createMockApi({
     return structuredClone(read());
   }
   return {
-    rfq: createRfqApi(respond, products, storage),
+    rfq: createRfqApi(respond, runtimeProducts, storage),
     getSiteData: (options) =>
       respond<SiteData>(
-        () => ({ ...data, products, faq, pageContent }),
+        () => ({ ...data, products: runtimeProducts, portfolio: runtimePortfolio, homeContent: runtimeHomeContent, businessSettings: runtimeBusinessSettings, faq, pageContent }),
         options,
       ),
     listProducts: (filters = {}, options) =>
-      respond(() => filterProducts(products, filters), options),
+      respond(() => filterProducts(runtimeProducts, filters), options),
     getProduct: (slug, options) =>
       respond(() => {
-        const product = products.find((p) => p.slug === slug);
+        const product = runtimeProducts.find((p) => p.slug === slug);
         if (!product)
           throw new ApiError("NOT_FOUND", "This product could not be found.");
         return product;
       }, options),
     estimatePrice: (input, options) =>
       respond(() => {
-        const product = products.find((p) => p.id === input.productId);
+        const product = runtimeProducts.find((p) => p.id === input.productId);
         if (!product)
           throw new ApiError("NOT_FOUND", "This product could not be found.");
         // Incomplete/unsupported configurations have no estimate; they are not network failures.

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { createId } from "../utils/id";
 import {
   Accordion,
   AccordionDetails,
@@ -84,7 +85,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   function request() {
     if (!configurable) {
       navigate(quoteUrl, {
-        state: { config, variantId, rfqEntryId: crypto.randomUUID() },
+        state: { config, variantId, rfqEntryId: createId() },
       });
       return;
     }
@@ -102,11 +103,11 @@ export default function ProductDetail({ product }: { product: Product }) {
     try {
       saveConfiguration(config);
       navigate("/request-quote", {
-        state: { config, variantId, rfqEntryId: crypto.randomUUID() },
+        state: { config, variantId, rfqEntryId: createId() },
       });
     } catch {
       navigate("/request-quote", {
-        state: { config, variantId, rfqEntryId: crypto.randomUUID() },
+        state: { config, variantId, rfqEntryId: createId() },
       });
     }
   }
@@ -576,7 +577,7 @@ export default function ProductDetail({ product }: { product: Product }) {
                   "Available sizes, finishes and pricing are confirmed with your quotation."}
               </p>
               <Button variant="contained" onClick={request}>
-                Request a Quote
+                {product.type === "configurable" ? "Get Instant Price" : "Request Custom Quote"}
               </Button>
             </div>
           )}
@@ -670,7 +671,7 @@ export default function ProductDetail({ product }: { product: Product }) {
             </strong>
           </div>
           <Button variant="contained" onClick={request}>
-            Request Quote
+            {product.type === "configurable" ? "Get Instant Price" : "Request Custom Quote"}
           </Button>
         </div>
       )}

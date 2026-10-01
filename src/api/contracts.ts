@@ -27,6 +27,26 @@ export type SiteData = {
   pageContent: Record<string, [string, string]>;
   awardImage: string;
   merchImage: string;
+  homeContent: {
+    announcement: string;
+    heroTitle: string;
+    heroText: string;
+    testimonialQuote: string;
+    testimonialName: string;
+    testimonialApproved: boolean;
+    policySummary: string;
+    featuredProjectName: string;
+    featuredProjectType: string;
+    featuredProjectImage: string;
+  };
+  businessSettings: {
+    businessName: string;
+    email: string;
+    phone: string;
+    address: string;
+    hours: string;
+    verified: boolean;
+  };
 };
 export type ProductFilters = {
   family?: string;
@@ -43,7 +63,14 @@ export type EstimateRequest = Pick<
   Configuration,
   "productId" | "size" | "finish" | "quantity"
 >;
-export type PriceEstimate = { unit: number; total: number; deposit: number };
+export type PriceEstimate = {
+  unit: number;
+  total: number;
+  deposit: number;
+  baseUnit?: number;
+  savings?: number;
+  nextTier?: { quantity: number; unit: number; addedCost: number };
+};
 export type RequestOptions = { signal?: AbortSignal };
 
 // Implement this interface in an AWS adapter when the backend contract is ready.

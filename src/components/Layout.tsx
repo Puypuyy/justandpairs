@@ -24,17 +24,16 @@ import { useCatalogTool } from "../hooks/useCatalogTool";
 export function Logo() {
   return (
     <Link className="brand" to="/" aria-label="Just and Pairs home">
-      <span className="brand-mark">
-        j<span>+</span>p
-      </span>
-      <span className="brand-words">
-        JUST AND PAIRS<small>IDEAS MADE TANGIBLE.</small>
-      </span>
+      <img
+        className="brand-logo-image"
+        src="/images/just-and-pairs-logo.jpg"
+        alt="Just and Pairs"
+      />
     </Link>
   );
 }
 export default function Layout() {
-  const { categories, occasions, products } = useSiteData();
+  const { categories, occasions, products, homeContent } = useSiteData();
   useCatalogTool();
   const [drawer, setDrawer] = useState(false);
   const [menu, setMenu] = useState<{
@@ -90,7 +89,7 @@ export default function Layout() {
       </a>
       <div className="utility">
         <div className="container">
-          <span>Custom awards & merchandise made for your moment.</span>
+          <span>{homeContent.announcement}</span>
           <div>
             <Link to="/track-order">Track Order</Link>
             <Link to="/help">Help</Link>

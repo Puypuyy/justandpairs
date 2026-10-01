@@ -20,6 +20,15 @@ export type Product = {
   style: string;
   occasionTags: string[];
   badge?: string;
+  pricingUnit?: "piece" | "set" | "flat";
+  quantityTiers?: {
+    min: number;
+    mode: "fixed" | "percent" | "amount" | "custom";
+    value?: number;
+  }[];
+  rushPercent?: number;
+  minimumQuantity?: number;
+  autoQuoteMax?: number | null;
 };
 export type Configuration = {
   productId: string;

@@ -20,6 +20,7 @@ export default function Home() {
     portfolio,
     products,
     steps,
+    homeContent,
   } = useSiteData();
   return (
     <>
@@ -29,15 +30,8 @@ export default function Home() {
             <span className="eyebrow">
               <span className="gold-line" /> CUSTOM AWARDS & MERCHANDISE
             </span>
-            <h1>
-              Recognition
-              <br />
-              made <span>tangible.</span>
-            </h1>
-            <p>
-              Custom plaques, awards and merchandise for achievements, events
-              and moments worth remembering.
-            </p>
+            <h1>{homeContent.heroTitle}</h1>
+            <p>{homeContent.heroText}</p>
             <div className="button-row">
               <Action to="/request-quote?mode=custom">
                 Start a Custom Order
@@ -298,7 +292,13 @@ export default function Home() {
           copy="Real stories deserve a space of their own."
         />
         <div className="proof-grid">
-          {[
+          {homeContent.testimonialApproved && homeContent.testimonialQuote ? (
+            <div className="approved-testimonial">
+              <span className="eyebrow">CUSTOMER STORY</span>
+              <h3>“{homeContent.testimonialQuote}”</h3>
+              <p>{homeContent.testimonialName}</p>
+            </div>
+          ) : [
             [
               "Customer stories",
               "Customer testimonials will appear here once shared with permission.",

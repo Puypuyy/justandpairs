@@ -10,6 +10,9 @@ import "./styles.css";
 const Catalog = lazy(() => import("./pages/Catalog"));
 const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 const Rfq = lazy(() => import("./pages/Rfq"));
+const QuickQuote = lazy(() => import("./pages/QuickQuote"));
+const QuickQuoteConfirmation = lazy(() => import("./pages/QuickQuote").then((module) => ({ default: module.QuickQuoteConfirmation })));
+const Admin = lazy(() => import("./pages/Admin"));
 const RfqConfirmation = lazy(() =>
   import("./pages/Rfq").then((module) => ({
     default: module.RfqConfirmation,
@@ -33,6 +36,10 @@ const RequestQuote = lazy(() =>
     default: module.RequestQuote,
   })),
 );
+const TrackOrder = lazy(() => import("./pages/CustomerPortal").then((module) => ({ default: module.TrackOrder })));
+const QuotationPreview = lazy(() => import("./pages/CustomerPortal").then((module) => ({ default: module.QuotationPreview })));
+const DesignApproval = lazy(() => import("./pages/CustomerPortal").then((module) => ({ default: module.DesignApproval })));
+const PaymentInstructions = lazy(() => import("./pages/CustomerPortal").then((module) => ({ default: module.PaymentInstructions })));
 const staticPage = (name: "About" | "Contact" | "NotFound" | "Privacy" | "Terms") =>
   lazy(() =>
     import("./pages/StaticPages").then((module) => ({
@@ -55,6 +62,7 @@ function AppRoutes() {
       }
     >
     <Routes>
+      <Route path="admin" element={<Admin />} />
       <Route element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="products" element={<Catalog />} />
@@ -74,14 +82,19 @@ function AppRoutes() {
         <Route path="contact" element={<Contact />} />
         <Route path="terms" element={<Terms />} />
         <Route path="privacy" element={<Privacy />} />
-        <Route path="request-quote" element={<Rfq />} />
+        <Route path="request-quote" element={<QuickQuote />} />
         <Route
           path="request-quote/confirmation/:id"
-          element={<RfqConfirmation />}
+          element={<QuickQuoteConfirmation />}
         />
+        <Route path="project-details" element={<Rfq />} />
+        <Route path="project-details/confirmation/:id" element={<RfqConfirmation />} />
         <Route path="quote-preview" element={<RequestQuote />} />
         <Route path="account" element={<InfoPage />} />
-        <Route path="track-order" element={<InfoPage />} />
+        <Route path="track-order" element={<TrackOrder />} />
+        <Route path="quotation/:id" element={<QuotationPreview />} />
+        <Route path="design-approval/:id" element={<DesignApproval />} />
+        <Route path="payment-instructions/:id" element={<PaymentInstructions />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
